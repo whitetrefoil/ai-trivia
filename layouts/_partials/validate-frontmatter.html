@@ -1,0 +1,21 @@
+{{- /*
+  校验 content/posts 下文章的必填 frontmatter：title、date、provider、model。
+  使用 errorf 而不是 warnf：hugo 遇到 ERROR 日志会以非零状态退出，
+  这样 PR 检查和部署工作流都会失败，坏文章不会被发布。
+  注意：draft: true 的文章不会被渲染，因此也不会触发校验。
+*/ -}}
+{{- if eq .Section "posts" -}}
+  {{- $file := .File.Path -}}
+  {{- if not .Params.title -}}
+    {{- errorf "frontmatter 缺少必填字段 title: %s" $file -}}
+  {{- end -}}
+  {{- if .Date.IsZero -}}
+    {{- errorf "frontmatter 缺少必填字段 date（或格式无法解析）: %s" $file -}}
+  {{- end -}}
+  {{- range slice "provider" "model" -}}
+    {{- $v := index $.Params . -}}
+    {{- if or (not $v) (not (eq (printf "%T" $v) "string")) -}}
+      {{- errorf "frontmatter 缺少必填字段 %s（须为非空字符串）: %s" . $file -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

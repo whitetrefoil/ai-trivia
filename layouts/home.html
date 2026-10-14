@@ -1,0 +1,11 @@
+{{ define "main" }}
+  {{ with site.Params.description }}<p class="site-description">{{ . }}</p>{{ end }}
+  <ul class="post-list">
+    {{ range where site.RegularPages "Section" "posts" }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ partial "post-meta.html" . }}
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

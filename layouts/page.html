@@ -1,0 +1,11 @@
+{{ define "main" }}
+  {{/* 构建期强制校验 frontmatter，缺字段直接让 hugo 构建失败 */}}
+  {{ partial "validate-frontmatter.html" . }}
+  <article>
+    <header>
+      <h1>{{ .Title }}</h1>
+      {{ partial "post-meta.html" . }}
+    </header>
+    {{ .Content }}
+  </article>
+{{ end }}

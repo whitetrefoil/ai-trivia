@@ -1,0 +1,24 @@
+# 站点配置。baseURL 在 CI 中由 GitHub Pages 的实际地址通过 --baseURL 覆盖，这里只作本地预览用。
+baseURL = "http://localhost:1313/"
+locale = "zh-CN"
+defaultContentLanguage = "zh"
+title = "AI Trivia"
+timeZone = "Asia/Shanghai"
+
+# 不需要标签/分类页，保持站点最小化
+disableKinds = ["taxonomy", "term"]
+
+# 文章主要由 AI agent 写入，date 很可能比构建时刻“晚”（时区或时钟差异）。
+# 默认的 buildFuture = false 会让这类文章被静默跳过，所以这里显式打开。
+buildFuture = true
+
+[params]
+  description = "由 AI 撰写的杂谈与小知识"
+
+[markup.goldmark.renderer]
+  # 不允许正文中的原始 HTML，避免生成内容混入脚本等
+  unsafe = false
+
+[markup.highlight]
+  noClasses = true
+  style = "github"

@@ -3,8 +3,9 @@
 # - push 到 main / 手动触发：构建并发布到 VPS
 #
 # 需要在仓库 Settings → Secrets and variables → Actions 中配置：
-#   Secrets：  VPS_HOST、VPS_USER、VPS_SSH_KEY（私钥）、VPS_KNOWN_HOSTS（`ssh-keyscan -p <端口> <主机>` 的输出）
-#   Variables：VPS_PATH（服务器上的站点目录，如 /var/www/ai-trivia）、SITE_URL（站点对外地址，如 https://blog.example.com）
+#   Secrets：  VPS_HOST、VPS_USER、VPS_PATH（服务器上的站点目录，如 /var/www/ai-trivia）、VPS_SSH_KEY（私钥）、
+#              VPS_KNOWN_HOSTS（`ssh-keyscan -p <端口> <主机>` 的输出）
+#   Variables：SITE_URL（站点对外地址，如 https://blog.example.com）
 #   可选 Variables：VPS_PORT（SSH 端口，默认 22）
 name: Build & Deploy
 
@@ -80,9 +81,9 @@ jobs:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_PORT: ${{ vars.VPS_PORT || '22' }}
-          VPS_PATH: ${{ vars.VPS_PATH }}
+          VPS_PATH: ${{ secrets.VPS_PATH }}
         run: |
-          : "${VPS_PATH:?请配置 Actions 变量 VPS_PATH}"
+          : "${VPS_PATH:?请配置 Actions 密钥 VPS_PATH}"
           # --delete 会让服务器目录与构建产物完全一致，VPS_PATH 必须是专用目录
           rsync -az --delete \
             -e "ssh -i ~/.ssh/id_deploy -p ${VPS_PORT} -o StrictHostKeyChecking=yes" \

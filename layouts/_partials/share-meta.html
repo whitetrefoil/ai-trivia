@@ -1,0 +1,38 @@
+{{- /*
+  分享相关的 meta：description 与 Open Graph 标签。
+  微信内置浏览器里通过右上角「…」分享时，卡片的标题 / 摘要 / 缩略图会尽量从这些标签读取；
+  但微信并不保证读取（正规做法是接入需要公众号和后端签名的 JS-SDK），这里只做低成本的尽力而为。
+  - 摘要：优先 frontmatter 的 description，文章页退回第一条消息，其余页面退回站点描述。
+  - 缩略图：只有 page bundle 文章有图片时才输出（取第一张），没有就不输出。
+  og:url / og:image 需要绝对地址，CI 里 baseURL 由 SITE_URL 覆盖，因此是正式地址。
+*/ -}}
+{{- $desc := site.Params.description -}}
+{{- with .Description -}}
+  {{- $desc = . -}}
+{{- else -}}
+  {{- if .IsPage -}}
+    {{- /* 文章是对话格式：取第一条消息正文（通常是提问），避免把「我」/ model 标签也带进摘要 */ -}}
+    {{- $text := .Plain -}}
+    {{- with findRESubmatch `(?s)<div class="msg-body">(.*?)</div>` .Content 1 -}}
+      {{- $text = index (index . 0) 1 | plainify | htmlUnescape -}}
+    {{- end -}}
+    {{- with $text | replaceRE `\s+` " " | strings.TrimSpace -}}
+      {{- $desc = . | truncate 100 -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+<meta name="description" content="{{ $desc }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="{{ replace site.Language.Locale "-" "_" }}">
+{{- if .IsPage }}
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- with .Resources.GetMatch "{*.png,*.jpg,*.jpeg,*.gif,*.webp}" }}
+<meta property="og:image" content="{{ .Permalink }}">
+{{- end }}
+{{- else }}
+<meta property="og:type" content="website">
+{{- end }}

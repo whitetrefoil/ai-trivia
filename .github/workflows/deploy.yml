@@ -45,7 +45,7 @@ jobs:
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site
           path: ./public
@@ -60,7 +60,7 @@ jobs:
       url: ${{ vars.SITE_URL }}
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: site
           path: ./public

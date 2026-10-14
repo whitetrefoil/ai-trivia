@@ -22,6 +22,8 @@ model: "claude-opus-5-5"
 ---
 ```
 
+`provider`、`model` 填原对话中给出回答的 AI（对话的原作者），而不是负责整理文章的 AI。
+
 `date`、`provider`、`model` 会显示在文章页和列表页的标题下方。
 
 ## 正文格式

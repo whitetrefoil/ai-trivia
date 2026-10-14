@@ -27,12 +27,24 @@ pre { overflow-x: auto; padding: .75rem 1rem; border-radius: 6px; }
 code { font-size: .9em; }
 blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid var(--muted); color: var(--muted); }
 
-/* 对话式文章：我的消息靠右、带底色；AI 回复占满宽度、左侧细线 */
-.msg { margin: 1.5rem 0; }
-.msg-from { font-size: .8rem; color: var(--muted); margin-bottom: .25rem; }
+/* 对话式文章：聊天气泡。我的消息靠右、强调色底、宽度随内容收缩；
+   AI 回复靠左、中性灰底；靠近说话人一侧的下角收窄成「尾巴」 */
+:root { --bubble-me: color-mix(in srgb, var(--accent) 16%, Canvas); --bubble-ai: color-mix(in srgb, CanvasText 6%, Canvas); }
+.msg { display: flex; flex-direction: column; align-items: flex-start; margin: 1.25rem 0; }
+.msg-me { align-items: flex-end; }
+.msg-from { font-size: .8rem; color: var(--muted); margin: 0 .5rem .25rem; }
+.msg-body {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  padding: .6rem 1rem;
+  border-radius: 18px;
+  overflow-wrap: anywhere;
+}
 .msg-body > :first-child { margin-top: 0; }
 .msg-body > :last-child { margin-bottom: 0; }
-.msg-me { margin-left: 15%; }
-.msg-me .msg-from { text-align: right; }
-.msg-me .msg-body { padding: .6rem 1rem; border-radius: 12px; background: color-mix(in srgb, var(--accent) 12%, transparent); }
-.msg-ai .msg-body { padding-left: 1rem; border-left: 3px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+.msg-me .msg-body { max-width: 85%; background: var(--bubble-me); border-bottom-right-radius: 4px; }
+.msg-ai .msg-body { background: var(--bubble-ai); border-bottom-left-radius: 4px; }
+.msg-body table { display: block; overflow-x: auto; }
+.msg-body pre { background: color-mix(in srgb, CanvasText 8%, Canvas); }
+@media (min-width: 40rem) { .msg-ai .msg-body { max-width: 92%; } }

@@ -1,0 +1,11 @@
+{{- /*
+  对话消息：我发出的消息（提问 / 追问）。
+  用 {{< me >}} 包裹 Markdown 正文；内部通过 RenderString 按块级 Markdown 渲染，
+  因此不要用 {{% me %}} 写法（会把外层 HTML 当作原始 HTML 过滤掉）。
+*/ -}}
+<section class="msg msg-me">
+  <div class="msg-from">我</div>
+  <div class="msg-body">
+    {{ .Inner | strings.TrimSpace | .Page.RenderString (dict "display" "block") }}
+  </div>
+</section>

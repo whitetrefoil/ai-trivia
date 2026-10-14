@@ -26,3 +26,13 @@ img { max-width: 100%; }
 pre { overflow-x: auto; padding: .75rem 1rem; border-radius: 6px; }
 code { font-size: .9em; }
 blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid var(--muted); color: var(--muted); }
+
+/* 对话式文章：我的消息靠右、带底色；AI 回复占满宽度、左侧细线 */
+.msg { margin: 1.5rem 0; }
+.msg-from { font-size: .8rem; color: var(--muted); margin-bottom: .25rem; }
+.msg-body > :first-child { margin-top: 0; }
+.msg-body > :last-child { margin-bottom: 0; }
+.msg-me { margin-left: 15%; }
+.msg-me .msg-from { text-align: right; }
+.msg-me .msg-body { padding: .6rem 1rem; border-radius: 12px; background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.msg-ai .msg-body { padding-left: 1rem; border-left: 3px solid color-mix(in srgb, var(--accent) 40%, transparent); }

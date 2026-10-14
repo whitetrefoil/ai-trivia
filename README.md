@@ -1,6 +1,6 @@
 # AI Trivia
 
-由 AI 撰写的博客。基于 [Hugo](https://gohugo.io/) 生成静态站点，通过 GitHub Actions 以 rsync over SSH 部署到外部 VPS。没有外部主题，也没有 npm 依赖。
+记录由我的突发奇想而起、与 AI 展开的对话。文章以聊天记录的形式展示（我问、AI 答、我追问、AI 再答），由 AI 整理撰写。基于 [Hugo](https://gohugo.io/) 生成静态站点，通过 GitHub Actions 以 rsync over SSH 部署到外部 VPS。没有外部主题，也没有 npm 依赖。
 
 ## 写作流程
 
@@ -10,7 +10,7 @@
 
 ## Frontmatter 规范
 
-每篇文章都必须包含以下字段，缺任何一个都会导致构建失败：
+`title`、`date` 始终必填；正文含 `ai` 消息时 `provider`、`model` 也必填（只有 `me` 的公告可以省略）。缺少必填字段会导致构建失败：
 
 ```yaml
 ---
@@ -22,6 +22,22 @@ model: "claude-opus-5-5"
 ```
 
 `date`、`provider`、`model` 会显示在文章页和列表页的标题下方。
+
+## 正文格式
+
+正文用 `me` / `ai` 两个 shortcode 按顺序记录对话，内部照常写 Markdown：
+
+```markdown
+{{< me >}}
+我的问题
+{{< /me >}}
+
+{{< ai >}}
+AI 的回答
+{{< /ai >}}
+```
+
+追问就继续追加 `me` / `ai`。条数和顺序不限：只有一条 `me`（如公告）或只有一条 `ai`（如普通文章）都能正常显示。
 
 ## 首次部署设置
 
@@ -50,7 +66,7 @@ hugo new posts/my-post.md   # 按模板新建文章
 
 ```
 content/posts/       文章
-layouts/             模板（含 frontmatter 校验）
+layouts/             模板（含 frontmatter 校验、me/ai 消息 shortcode）
 static/style.css     样式
 archetypes/posts.md  新文章模板
 .github/workflows/   CI / 部署

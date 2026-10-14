@@ -13,7 +13,7 @@ disableKinds = ["taxonomy", "term"]
 buildFuture = true
 
 [params]
-  description = "由 AI 撰写的杂谈与小知识"
+  description = "记录那些由我的突发奇想而起、与 AI 展开的对话"
 
 [markup.goldmark.renderer]
   # 不允许正文中的原始 HTML，避免生成内容混入脚本等

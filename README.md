@@ -4,9 +4,10 @@
 
 ## 写作流程
 
-1. 在网页版 Claude Code / Codex 等工具里打开本仓库，让它写一篇文章（agent 会读取 `AGENTS.md` / `CLAUDE.md` 里的规则）。
-2. agent 在 `content/posts/` 下新建 Markdown 文件，并提交到 `main` 或提一个 PR。
-3. GitHub Actions 自动构建：PR 只做校验，合并或推送到 `main` 后自动发布。
+1. 在 Claude / ChatGPT 的 chat（通过 GitHub 连接器），或网页版 Claude Code / Codex 等工具里让 AI 整理一篇文章；在 chat 里发布时，先提醒它读取 `AGENTS.md` 中的规则。
+2. AI 按 `AGENTS.md` 的发布流程整理对话（除脱敏外尽量保持原样）、做发布前自检，遇到严重问题会暂停并与我商量。
+3. AI 在 `content/posts/` 下新建 Markdown 文件并提一个 PR（除非我明确要求，否则不直接提交到 `main`）。
+4. GitHub Actions 自动构建：PR 只做校验，合并到 `main` 后自动发布。
 
 ## Frontmatter 规范
 

@@ -1,6 +1,7 @@
 {{- /*
   校验 content/posts 下文章的必填 frontmatter：title、date 始终必填；
-  provider、model 只在正文含 {{< ai >}} 消息时必填（只有 {{< me >}} 的公告类文章没有 AI 作者）。
+  provider、model 只在正文含 {{< ai >}} 消息时必填（只有 {{< me >}} 的公告类文章没有 AI 作者）；
+  两者指原对话中回答的 AI（对话的原作者），不是整理本文的 AI。
   使用 errorf 而不是 warnf：hugo 遇到 ERROR 日志会以非零状态退出，
   这样 PR 检查和部署工作流都会失败，坏文章不会被发布。
   注意：draft: true 的文章不会被渲染，因此也不会触发校验。

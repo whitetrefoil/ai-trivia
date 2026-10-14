@@ -33,7 +33,7 @@
 - **忠实度**：与原对话逐条对照，除脱敏和格式所需的最小改动外没有其他改动，没有漏掉或多出消息。
 - **事实**：AI 回答中没有明显错误或可能误导读者的内容。
 - **适宜公开**：没有侵权、违法、冒犯或明显不宜公开的内容。
-- **格式**：frontmatter 字段齐全且如实（尤其 `model`），shortcode 成对闭合，没有原始 HTML 和一级标题，图片路径正确。
+- **格式**：frontmatter 字段齐全且如实（尤其 `provider` / `model` 是原对话中回答的 AI，而不是整理本文的你），shortcode 成对闭合，没有原始 HTML 和一级标题，图片路径正确。
 
 **严重问题**（暂停发布、与用户商量，不要自行修改后继续）包括但不限于：
 
@@ -47,7 +47,7 @@
 ## 写一篇新文章
 
 1. 在 `content/posts/` 下新建 `<slug>.md`，slug 使用小写英文、数字和连字符，例如 `why-llms-hallucinate.md`。
-2. 文件开头必须是 YAML frontmatter，`title`、`date` 始终必填；正文含 `ai` 消息时 `provider`、`model` 也必填（AI 撰写的文章一定会含 `ai` 消息，所以你写的文章四个字段都要填）：
+2. 文件开头必须是 YAML frontmatter，`title`、`date` 始终必填；正文含 `ai` 消息时 `provider`、`model` 也必填（整理的对话里一定有 AI 的回答，所以你写的文章四个字段都要填）：
 
    ```yaml
    ---
@@ -60,8 +60,8 @@
 
    - `title`：文章标题。
    - `date`：ISO 8601 时间，带时区（站点时区为 Asia/Shanghai）。
-   - `provider`：撰写本文的模型提供方，如 `Anthropic`、`OpenAI`。
-   - `model`：撰写本文的**你自己**的模型 ID，如实填写，不要编造。
+   - `provider`：原对话中给出 `ai` 回答的模型的提供方，如 `Anthropic`、`OpenAI`。
+   - `model`：原对话中给出 `ai` 回答的模型 ID，即对话的**原作者**，而不是负责整理本文的你自己（除非原对话本来就是与你进行的）。依据原对话或用户提供的信息如实填写；拿不准时询问用户，不要编造，也不要拿自己的模型 ID 代替。
 3. frontmatter 之后的正文用对话格式书写：用 `me`（用户的提问 / 追问）和 `ai`（AI 的回答）两个 shortcode 按时间顺序包裹每条消息，内部照常写 Markdown：
 
    ```markdown

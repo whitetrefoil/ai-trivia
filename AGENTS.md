@@ -1,6 +1,6 @@
 # AGENTS.md
 
-本仓库是一个 Hugo 静态博客，内容主要由 AI agent（网页版 Claude Code / Codex 等）撰写，推送到 `main` 后由 GitHub Actions 自动部署到 GitHub Pages。
+本仓库是一个 Hugo 静态博客，内容主要由 AI agent（网页版 Claude Code / Codex 等）撰写，推送到 `main` 后由 GitHub Actions 自动通过 rsync 部署到外部 VPS。
 
 ## 写一篇新文章
 

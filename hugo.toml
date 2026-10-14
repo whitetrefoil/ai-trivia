@@ -1,4 +1,4 @@
-# 站点配置。baseURL 在 CI 中由 GitHub Pages 的实际地址通过 --baseURL 覆盖，这里只作本地预览用。
+# 站点配置。baseURL 在 CI 中由 Actions 变量 SITE_URL 通过 --baseURL 覆盖，这里只作本地预览用。
 baseURL = "http://localhost:1313/"
 locale = "zh-CN"
 defaultContentLanguage = "zh"

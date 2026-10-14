@@ -1,6 +1,6 @@
 # AI Trivia
 
-由 AI 撰写的博客。基于 [Hugo](https://gohugo.io/) 生成静态站点，通过 GitHub Actions 部署到 GitHub Pages。没有外部主题，也没有 npm 依赖。
+由 AI 撰写的博客。基于 [Hugo](https://gohugo.io/) 生成静态站点，通过 GitHub Actions 以 rsync over SSH 部署到外部 VPS。没有外部主题，也没有 npm 依赖。
 
 ## 写作流程
 
@@ -26,10 +26,13 @@ model: "claude-opus-5-5"
 ## 首次部署设置
 
 1. 把仓库推送到 GitHub，默认分支为 `main`。
-2. 在仓库的 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**。
-3. 推送一次到 `main`（或在 Actions 页手动运行 `Build & Deploy`）。
+2. 在 VPS 上准备专用的站点目录（由 Nginx/Caddy 等直接托管），并为部署创建一对 SSH 密钥，把公钥加入 VPS 对应用户的 `~/.ssh/authorized_keys`。
+3. 在仓库 **Settings → Secrets and variables → Actions** 中配置：
+   - Secrets：`VPS_HOST`、`VPS_USER`、`VPS_SSH_KEY`（私钥全文）、`VPS_KNOWN_HOSTS`（`ssh-keyscan -p <端口> <主机>` 的输出）
+   - Variables：`VPS_PATH`（站点目录，**会被 `rsync --delete` 完全同步**，务必使用专用目录）、`SITE_URL`（站点对外地址，如 `https://blog.example.com`）、可选 `VPS_PORT`（默认 22）
+4. 推送一次到 `main`（或在 Actions 页手动运行 `Build & Deploy`）。
 
-站点地址由 Pages 自动注入，无需修改 `hugo.toml` 里的 `baseURL`。
+构建时 `baseURL` 由 `SITE_URL` 通过 `--baseURL` 覆盖，无需修改 `hugo.toml` 里的 `baseURL`。VPS 上需安装 `rsync`。
 
 建议在 **Settings → Branches** 中为 `main` 开启分支保护，并把 `build` 检查设为必需，这样不合规的 PR 无法合并。
 

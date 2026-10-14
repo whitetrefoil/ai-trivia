@@ -68,7 +68,7 @@ hugo new posts/my-post.md   # 按模板新建文章
 ```
 content/posts/       文章
 layouts/             模板（含 frontmatter 校验、me/ai 消息 shortcode）
-static/style.css     样式
+assets/style.css     样式（构建时加内容指纹）
 archetypes/posts.md  新文章模板
 .github/workflows/   CI / 部署
 ```

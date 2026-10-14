@@ -103,7 +103,7 @@
   - `_partials/validate-frontmatter.html`：必填字段校验，只作用于 `posts` 分区。
   - `_shortcodes/me.html`、`_shortcodes/ai.html`：对话消息。
   - `_partials/post-meta.html`：日期 · provider / model 的展示。
-- `static/style.css`：全部样式。
+- `assets/style.css`：全部样式。经 Hugo Pipes 压缩并加内容指纹后引用（文件名带哈希，用于缓存失效），不要放回 `static/`。
 - `archetypes/posts.md`：`hugo new posts/xxx.md` 的模板。
 - `.github/workflows/deploy.yml`：PR 时只构建校验，push 到 `main` 时构建并部署。
 

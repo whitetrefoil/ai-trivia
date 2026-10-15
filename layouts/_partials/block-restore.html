@@ -1,0 +1,11 @@
+{{- /*
+  与 block-stash.html 配对：把渲染结果中的占位符换回暂存的 HTML。
+  参数：dict "page" .Page "html" <渲染后的 HTML>；返回替换后的 HTML。
+  占位符单独成段时会被包进 <p>，一并去掉，避免块级元素落在段落里。
+*/ -}}
+{{- $html := .html }}
+{{- range $key, $block := .page.Store.Get "blockStash" }}
+  {{- $html = replace $html (printf "<p>%s</p>" $key) $block }}
+  {{- $html = replace $html $key $block }}
+{{- end }}
+{{- return $html }}

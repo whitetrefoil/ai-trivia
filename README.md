@@ -42,6 +42,13 @@ AI 的回答
 
 追问就继续追加 `me` / `ai`。条数和顺序不限：只有一条 `me`（如公告）或只有一条 `ai`（如普通文章）都能正常显示。
 
+站点禁用了原始 HTML。Markdown 表达不了的排版用以下写法（详见 `AGENTS.md`）：
+
+- 中文标点旁加粗失效时，在 `**` 外侧加 `\ `：`**阿德维塔（Adwaita）**\ 的象龟`
+- 数学公式：行内 `\(...\)`，独立成行 `$$...$$` 或 `\[...\]`（构建时转成 MathML）
+- 折叠块：`{{< details summary="标题" >}}…{{< /details >}}`
+- 图文卡片：`{{< card img="xxx.jpg" alt="说明" >}}…{{< /card >}}`
+
 ## 首次部署设置
 
 1. 把仓库推送到 GitHub，默认分支为 `main`。
@@ -69,7 +76,7 @@ hugo new posts/my-post.md   # 按模板新建文章
 
 ```
 content/posts/       文章
-layouts/             模板（含 frontmatter 校验、me/ai 消息 shortcode）
+layouts/             模板（含 frontmatter 校验、me/ai/card/details shortcode、公式渲染）
 assets/style.css     样式（构建时加内容指纹）
 archetypes/posts.md  新文章模板
 .github/workflows/   CI / 部署

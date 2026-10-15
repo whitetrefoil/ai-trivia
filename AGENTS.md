@@ -33,7 +33,7 @@
 - **忠实度**：与原对话逐条对照，除脱敏和格式所需的最小改动外没有其他改动，没有漏掉或多出消息。
 - **事实**：AI 回答中没有明显错误或可能误导读者的内容。
 - **适宜公开**：没有侵权、违法、冒犯或明显不宜公开的内容。
-- **格式**：frontmatter 字段齐全且如实（尤其 `provider` / `model` 是原对话中回答的 AI，而不是整理本文的你），shortcode 成对闭合，没有原始 HTML 和一级标题，图片路径正确。
+- **格式**：frontmatter 字段齐全且如实（尤其 `provider` / `model` 是原对话中回答的 AI，而不是整理本文的你），shortcode 成对闭合，没有原始 HTML 和一级标题，图片路径正确；加粗都生效：构建结果里没有残留的 `**`，也没有 `<strong>` 套 `<strong>`（错位配对），见「写一篇新文章」第 4 条。
 
 **严重问题**（暂停发布、与用户商量，不要自行修改后继续）包括但不限于：
 
@@ -86,7 +86,12 @@
    - 必须用 `{{< >}}` 写法，不要用 `{{% %}}`（外层 HTML 会被过滤）；消息之外不要写正文。
    - `ai` 消息的标签显示 frontmatter 中的 `model`。
    - 正文不要写一级标题（模板会用 `title` 渲染）。
-4. 不要使用原始 HTML（已被禁用，会被过滤掉）。
+4. 不要使用原始 HTML（已被禁用，会被过滤掉）。Markdown 表达不了的排版用下面的写法：
+   - **中文标点旁的加粗**：`**` 内侧是中文标点（`“”（）。，` 等）、外侧紧挨汉字时，加粗会失效。这时在那一侧的 `**` 外面加 `\ `（反斜杠 + 空格），它会渲染为空，例如 `名叫**阿德维塔（Adwaita）**\ 的象龟`、`这是\ **“引号”**\ 测试`。这属于格式所需的最小改动，不算改动原文。
+   - **数学公式**：行内用 `\(...\)`，独立成行用 `$$...$$` 或 `\[...\]`，内部写 LaTeX，构建时转成 MathML。不支持单个 `$`（避免与金额冲突），原文用 `$...$` 写公式时改成 `\(...\)`。公式有语法错误时构建会失败。
+   - **折叠块**：`{{< details summary="标题" >}}…{{< /details >}}`，可加 `open="true"` 默认展开。
+   - **图文卡片**（聊天界面里左图右文的信息卡片）：`{{< card img="xxx.jpg" alt="说明" >}}右侧的 Markdown{{< /card >}}`，窄屏时上下排列；`img` 是 page bundle 中的图片，可省略。
+   - 以上块写在 `me` / `ai` 内部时，前后各空一行。其他排版需要新的 shortcode 时先和用户商量，不要为此打开原始 HTML。
 5. 需要图片时使用 page bundle：文章写成 `content/posts/<slug>/index.md`，图片放在同目录，用相对路径 `![说明](xxx.png)` 引用。不要用 `/images/...` 这类绝对路径——站点可能部署在子路径（如 `/<repo>/`）下，绝对路径会失效。
 
 缺少必填字段或 `date` 无法解析时，`hugo` 构建会报 `ERROR ...` 并失败，PR 检查和部署都会变红。
@@ -98,10 +103,12 @@
 
 ## 项目结构
 
-- `hugo.toml`：站点配置。
+- `hugo.toml`：站点配置（含 Goldmark 的 CJK、passthrough 扩展）。
 - `layouts/`：自有极简模板（无外部主题），使用 Hugo 0.146+ 的新模板目录结构。
   - `_partials/validate-frontmatter.html`：必填字段校验，只作用于 `posts` 分区。
   - `_shortcodes/me.html`、`_shortcodes/ai.html`：对话消息。
+  - `_shortcodes/card.html`、`_shortcodes/details.html`：图文卡片、折叠块（`details` 覆盖 Hugo 内置版本）。嵌套在消息里的块经 `_partials/block-stash.html` / `block-restore.html` 的占位机制保留 HTML。
+  - `_markup/render-passthrough.html`：数学公式，构建时用 `transform.ToMath` 转成 MathML。
   - `_partials/post-meta.html`：日期 · provider / model 的展示。
   - `_partials/share-meta.html`：description 与 Open Graph 标签（微信等分享卡片尽力读取）；摘要默认取第一条消息，可用 frontmatter 的 `description` 覆盖，page bundle 中的第一张图片作为缩略图。
 - `assets/style.css`：全部样式。经 Hugo Pipes 压缩并加内容指纹后引用（文件名带哈希，用于缓存失效），不要放回 `static/`。

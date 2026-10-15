@@ -48,3 +48,17 @@ blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid var(--mu
 .msg-body table { display: block; overflow-x: auto; }
 .msg-body pre { background: color-mix(in srgb, CanvasText 8%, Canvas); }
 @media (min-width: 40rem) { .msg-ai .msg-body { max-width: 92%; } }
+
+/* 数学公式（构建时生成的 MathML）：块级公式过宽时横向滚动 */
+math[display="block"] { overflow-x: auto; overflow-y: hidden; padding: .25rem 0; }
+
+/* card shortcode：左图右文，窄屏上下排列 */
+.card { display: grid; gap: 1rem; align-items: start; margin: 1rem 0; }
+.card-img { width: 100%; border-radius: 12px; }
+.card-body > :first-child { margin-top: 0; }
+.card-body > :last-child { margin-bottom: 0; }
+@media (min-width: 30rem) { .card:has(.card-img) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+/* details shortcode（Hugo 内置）：折叠块 */
+details { margin: 1rem 0; }
+summary { cursor: pointer; }

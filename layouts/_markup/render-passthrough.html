@@ -1,0 +1,12 @@
+{{- /*
+  数学公式：把 passthrough 扩展保留下来的 LaTeX 在构建时转成 MathML，浏览器原生渲染，
+  不需要 KaTeX 的 JS / CSS / 字体。公式写错时让构建失败，而不是悄悄输出原文。
+*/ -}}
+{{- $opts := dict "output" "mathml" "displayMode" (eq .Type "block") }}
+{{- with try (transform.ToMath .Inner $opts) }}
+  {{- with .Err }}
+    {{- errorf "%s：公式无法解析（%s）：%s" $.Page.File.Path . $.Inner }}
+  {{- else }}
+    {{- .Value }}
+  {{- end }}
+{{- end -}}

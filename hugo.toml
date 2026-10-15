@@ -19,6 +19,22 @@ buildFuture = true
   # 不允许正文中的原始 HTML，避免生成内容混入脚本等
   unsafe = false
 
+# 中文排版：中文字符之间的换行不再渲染成空格。
+# escapedSpace 让 `\ ` 渲染为空，用来解决「加粗内容首尾是中文标点、外侧紧挨汉字」时 ** 失效的问题，
+# 例如 `**阿德维塔（Adwaita）**\ 的象龟`。详见 AGENTS.md。
+[markup.goldmark.extensions.cjk]
+  enable = true
+  eastAsianLineBreaks = true
+  escapedSpace = true
+
+# 数学公式：原样保留定界符内的 LaTeX，交给 layouts/_markup/render-passthrough.html
+# 在构建时转成 MathML（不需要前端 JS / 字体）。不启用单个 `$`，避免与金额等文字冲突。
+[markup.goldmark.extensions.passthrough]
+  enable = true
+  [markup.goldmark.extensions.passthrough.delimiters]
+    inline = [['\(', '\)']]
+    block = [['\[', '\]'], ['$$', '$$']]
+
 [markup.highlight]
   noClasses = true
   style = "github"

@@ -1,0 +1,11 @@
+{{- /*
+  嵌套块的占位机制。
+  me / ai 用 RenderString 渲染 .Inner，而嵌套在其中的 shortcode（card、details 等）
+  会先输出 HTML，再被当作原始 HTML 过滤掉（站点禁用了 unsafe）。
+  因此嵌套块把自己的 HTML 暂存到页面 Store，只输出一个纯字母数字的占位符；
+  me / ai 渲染完 Markdown 后调用 block-restore.html 换回真正的 HTML。
+  参数：dict "page" .Page "html" <HTML 字符串>；返回占位符（由内容哈希生成，同一页内唯一）。
+*/ -}}
+{{- $key := printf "BLOCKSTASH%s" (md5 .html) }}
+{{- .page.Store.SetInMap "blockStash" $key .html }}
+{{- return $key }}

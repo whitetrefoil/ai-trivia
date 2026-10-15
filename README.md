@@ -42,6 +42,11 @@ AI 的回答
 
 追问就继续追加 `me` / `ai`。条数和顺序不限：只有一条 `me`（如公告）或只有一条 `ai`（如普通文章）都能正常显示。
 
+站点禁用了原始 HTML。另外两点格式规则（详见 `AGENTS.md`「加粗、斜体与公式」）：
+
+- 加粗 / 斜体的 `**` / `*` 内侧是标点、外侧紧挨文字时会失效，在外侧加 `\ `（渲染为空）：`**阿德维塔（Adwaita）**\ 的象龟`。`scripts/check-emphasis.sh` 会在构建后检查，CI 中也会执行。
+- 数学公式：行内 `\(...\)`，独立成行 `$$...$$` 或 `\[...\]`，构建时转成 MathML；单个 `$` 不是定界符。
+
 ## 首次部署设置
 
 1. 把仓库推送到 GitHub，默认分支为 `main`。
@@ -62,6 +67,7 @@ AI 的回答
 ```sh
 hugo server          # 本地预览 http://localhost:1313/
 hugo --gc --minify   # 生成到 public/
+sh scripts/check-emphasis.sh   # 检查失效的加粗 / 斜体
 hugo new posts/my-post.md   # 按模板新建文章
 ```
 
@@ -72,5 +78,6 @@ content/posts/       文章
 layouts/             模板（含 frontmatter 校验、me/ai 消息 shortcode）
 assets/style.css     样式（构建时加内容指纹）
 archetypes/posts.md  新文章模板
+scripts/            构建后检查脚本
 .github/workflows/   CI / 部署
 ```

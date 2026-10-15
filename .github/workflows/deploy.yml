@@ -1,5 +1,5 @@
 # 构建并通过 rsync over SSH 部署到外部 VPS。
-# - pull_request：只构建，用作 frontmatter 校验（agent 提的 PR 不合规会直接红）
+# - pull_request：只构建，用作 frontmatter 与加粗 / 斜体校验（agent 提的 PR 不合规会直接红）
 # - push 到 main / 手动触发：构建并发布到 VPS
 #
 # 需要在仓库 Settings → Secrets and variables → Actions 中配置：
@@ -42,6 +42,10 @@ jobs:
       - name: Build
         # PR 构建不发布，用占位 baseURL 即可
         run: hugo --gc --minify --baseURL "${{ (github.event_name != 'pull_request' && vars.SITE_URL) || 'https://example.invalid' }}/"
+
+      - name: Check emphasis
+        # 中文标点旁的 ** / * 容易失效，详见 AGENTS.md「加粗、斜体与公式」
+        run: sh scripts/check-emphasis.sh public
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
